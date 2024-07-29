@@ -1,1 +1,1 @@
-https://sakalt.github.io/QuantumOS2105/MSOS.html
+https://sakalt.github.io/quantumOS2105/MSOS.html
