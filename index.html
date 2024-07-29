@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumOS 2105</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .app {
+            background-color: #0078d7;
+            color: white;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .app:hover {
+            background-color: #005bb5;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>QuantumOS 2105 - Quantum Computing</h1>
+    <div class="app-container">
+        <div class="app" id="app1">Paint</div>
+        <div class="app" id="app2">Calculator</div>
+        <div class="app" id="app3">Camera</div>
+        <div class="app" id="app4">File Explorer</div>
+        <div class="app" id="app5">Browser</div>
+        <div class="app" id="app6">Music</div>
+        <div class="app" id="app7">TV</div>
+        <div class="app" id="app8">Quantum</div>
+    </div>
+    <iframe id="appFrame" class="hidden"></iframe>
+
+    <script>
+        // 起動音を再生する関数
+        function playStartupSound() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // A3音の周波数は220Hz
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 1);
+            oscillator.stop(audioCtx.currentTime + 1);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            playStartupSound();
+
+            const appFrame = document.getElementById('appFrame');
+            const apps = [
+                { id: 'app1', url: 'https://sakalt.github.io/paint' },
+                { id: 'app2', url: 'https://sakalt.github.io/macOS-palo-alto-fiction-/calc.html' }, // URL or local file path
+                { id: 'app3', url: 'camera.html' }, // URL or local file path
+                { id: 'app4', url: 'https:/drive.google.com' }, // URL or local file path
+                { id: 'app5', url: 'https://www.bing.com' }, // URL or local file path
+                { id: 'app6', url: 'https://music.apple.com' }, // URL or local file path
+                { id: 'app7', url: 'https://tver.jp' }, // URL or local file path
+                { id: 'app8', url: 'Quantum.html' } // Quantum computing app
+            ];
+
+            apps.forEach(app => {
+                document.getElementById(app.id).addEventListener('click', () => {
+                    appFrame.src = app.url;
+                    appFrame.classList.remove('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
