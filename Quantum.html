@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Computing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script>
+        require.config({
+            paths: {
+                'qiskit': 'https://cdnjs.cloudflare.com/ajax/libs/qiskit/0.23.0/qiskit.min'
+            }
+        });
+        require(['qiskit'], function (qiskit) {
+            // ここにQiskitのコードを記述します
+            // 以下は簡単な量子回路の例です
+
+            async function runQuantumCircuit() {
+                const { QuantumCircuit, transpile, Aer, execute } = qiskit;
+
+                const qc = new QuantumCircuit(2);
+                qc.h(0);
+                qc.cx(0, 1);
+                qc.measure_all();
+
+                const simulator = Aer.get_backend('qasm_simulator');
+                const compiled_circuit = transpile(qc, simulator);
+                const job = await execute(compiled_circuit, simulator, { shots: 1000 });
+                const result = await job.result();
+
+                const counts = result.get_counts(compiled_circuit);
+                document.getElementById('result').innerText = `測定結果: ${JSON.stringify(counts)}`;
+            }
+
+            document.getElementById('run-button').addEventListener('click', runQuantumCircuit);
+        });
+    </script>
+</head>
+<body>
+    <h1>Quantum Computing</h1>
+    <button id="run-button">Run Quantum Circuit</button>
+    <pre id="result"></pre>
+</body>
+</html>
