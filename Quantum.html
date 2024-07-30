@@ -3,31 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Computing</title>
+    <title>量子コンピュータ</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #run-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        pre {
+            text-align: left;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>量子コンピュータアプリ</h1>
+    <button id="run-button">量子回路を実行</button>
+    <pre id="result"></pre>
+
     <script>
         require.config({
             paths: {
                 'qiskit': 'https://cdnjs.cloudflare.com/ajax/libs/qiskit/0.23.0/qiskit.min'
             }
         });
-        require(['qiskit'], function (qiskit) {
-            // ここにQiskitのコードを記述します
-            // 以下は簡単な量子回路の例です
 
+        require(['qiskit'], function (qiskit) {
             async function runQuantumCircuit() {
                 const { QuantumCircuit, transpile, Aer, execute } = qiskit;
 
+                // 2量子ビットの量子回路を作成
                 const qc = new QuantumCircuit(2);
+
+                // 量子ビット0にアダマールゲートを適用
                 qc.h(0);
+
+                // 量子ビット0と量子ビット1の間にCNOTゲートを適用
                 qc.cx(0, 1);
+
+                // すべての量子ビットを測定
                 qc.measure_all();
 
+                // シミュレータを選択
                 const simulator = Aer.get_backend('qasm_simulator');
+
+                // 回路をコンパイル
                 const compiled_circuit = transpile(qc, simulator);
+
+                // 回路を実行
                 const job = await execute(compiled_circuit, simulator, { shots: 1000 });
                 const result = await job.result();
 
+                // 測定結果を取得
                 const counts = result.get_counts(compiled_circuit);
                 document.getElementById('result').innerText = `測定結果: ${JSON.stringify(counts)}`;
             }
@@ -35,10 +86,5 @@
             document.getElementById('run-button').addEventListener('click', runQuantumCircuit);
         });
     </script>
-</head>
-<body>
-    <h1>Quantum Computing</h1>
-    <button id="run-button">Run Quantum Circuit</button>
-    <pre id="result"></pre>
 </body>
 </html>
