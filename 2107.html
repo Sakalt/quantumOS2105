@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumOS 2107</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #taskbar {
+            background-color: #333;
+            color: white;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            justify-content: space-between;
+        }
+
+        #start-menu {
+            display: none;
+            position: absolute;
+            bottom: 40px;
+            left: 10px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #555;
+            width: 200px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        #start-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #start-menu li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #start-menu li:hover {
+            background-color: #555;
+        }
+
+        .app-window {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 500px;
+            height: 400px;
+            top: 50px;
+            left: 50px;
+            resize: both;
+            overflow: hidden;
+        }
+
+        .app-header {
+            background-color: #0078d7;
+            color: white;
+            padding: 5px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header .close-button {
+            cursor: pointer;
+        }
+
+        .app-content {
+            padding: 10px;
+            height: calc(100% - 30px);
+            overflow: auto;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="taskbar">
+        <div id="start-button">スタート</div>
+        <div>QuantumOS 2107</div>
+    </div>
+    <div id="start-menu">
+        <ul>
+            <li onclick="openApp('app1')">ペイント</li>
+            <li onclick="openApp('app2')">電卓</li>
+            <li onclick="openApp('app3')">カメラ</li>
+            <li onclick="openApp('app4')">ファイルエクスプローラ</li>
+            <li onclick="openApp('app5')">ブラウザ</li>
+            <li onclick="openApp('app6')">音楽</li>
+            <li onclick="openApp('app7')">テレビ</li>
+            <li onclick="openApp('app8')">量子コンピュータ</li>
+        </ul>
+    </div>
+
+    <div id="app1" class="app-window">
+        <div class="app-header">
+            ペイント
+            <span class="close-button" onclick="closeApp('app1')">✖</span>
+        </div>
+        <div class="app-content">
+            <iframe src="https://sakalt.github.io/paint"></iframe>
+        </div>
+    </div>
+    <div id="app2" class="app-window">
+        <div class="app-header">
+            電卓
+            <span class="close-button" onclick="closeApp('app2')">✖</span>
+        </div>
+        <div class="app-content">
+            <input type="text" id="display" disabled>
+            <br>
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="setOperation('+')">+</button>
+            <br>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="setOperation('-')">-</button>
+            <br>
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="setOperation('*')">*</button>
+            <br>
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="calculate()">=</button>
+            <button onclick="setOperation('/')">/</button>
+        </div>
+    </div>
+    <div id="app3" class="app-window">
+        <div class="app-header">
+            カメラ
+            <span class="close-button" onclick="closeApp('app3')">✖</span>
+        </div>
+        <div class="app-content">
+            <video id="camera" width="100%" height="100%" autoplay></video>
+        </div>
+    </div>
+    <div id="app4" class="app-window">
+        <div class="app-header">
+            ファイルエクスプローラ
+            <span class="close-button" onclick="closeApp('app4')">✖</span>
+        </div>
+        <div class="app-content">
+            <iframe src="https://drive.google.com"></iframe>
+        </div>
+    </div>
+    <div id="app5" class="app-window">
+        <div class="app-header">
+            ブラウザ
+            <span class="close-button" onclick="closeApp('app5')">✖</span>
+        </div>
+        <div class="app-content">
+            <iframe src="https://example.com"></iframe>
+        </div>
+    </div>
+    <div id="app6" class="app-window">
+        <div class="app-header">
+            音楽
+            <span class="close-button" onclick="closeApp('app6')">✖</span>
+        </div>
+        <div class="app-content">
+            <iframe src="https://www.spotify.com"></iframe>
+        </div>
+    </div>
+    <div id="app7" class="app-window">
+        <div class="app-header">
+            テレビ
+            <span class="close-button" onclick="closeApp('app7')">✖</span>
+        </div>
+        <div class="app-content">
+            <iframe src="https://www.youtube.com"></iframe>
+        </div>
+    </div>
+    <div id="app8" class="app-window">
+        <div class="app-header">
+            量子コンピュータ
+            <span class="close-button" onclick="closeApp('app8')">✖</span>
+        </div>
+        <div class="app-content">
+            <button id="run-button">量子回路を実行</button>
+            <pre id="result"></pre>
+        </div>
+    </div>
+
+    <script>
+        function playStartupSound() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // A3音の周波数は220Hz
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 1);
+            oscillator.stop(audioCtx.currentTime + 1);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            playStartupSound();
+
+            const startButton = document.getElementById('start-button');
+            const startMenu = document.getElementById('start-menu');
+            startButton.addEventListener('click', () => {
+                startMenu.style.display = startMenu.style.display === 'none' ? 'block' : 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (!startButton.contains(event.target) && !startMenu.contains(event.target)) {
+                    startMenu.style.display = 'none';
+                }
+            });
+
+            const apps = [
+                { id: 'app1', url: 'https://sakalt.github.io/paint' },
+                { id: 'app2', url: '' }, // 電卓のHTMLコードはインラインで含める
+                { id: 'app3', url: '' }, // カメラのHTMLコードはインラインで含める
+                { id: 'app4', url: 'https://drive.google.com' },
+                { id: 'app5', url: 'https://example.com' },
+                { id: 'app6', url: 'https://www.spotify.com' },
+                { id: 'app7', url: 'https://www.youtube.com' },
+                { id: 'app8', url: '' } // 量子コンピュータのHTMLコードはインラインで含める
+            ];
+
+            apps.forEach(app => {
+                document.getElementById(app.id).addEventListener('click', () => {
+                    openApp(app.id);
+                    if (app.url) {
+                        document.querySelector(`#${app.id} iframe`).src = app.url;
+                    }
+                });
+            });
+        });
+
+        function openApp(appId) {
+            document.getElementById(appId).style.display = 'block';
+        }
+
+        function closeApp(appId) {
+            document.getElementById(appId).style.display = 'none';
+        }
+
+        function appendNumber(number) {
+            currentNumber += number;
+            document.getElementById('display').value = currentNumber;
+        }
+
+        function setOperation(op) {
+            if (currentNumber === '') return;
+            if (previousNumber !== '') calculate();
+            operation = op;
+            previousNumber = currentNumber;
+            currentNumber = '';
+        }
+
+        function calculate() {
+            let result;
+            const prev = parseFloat(previousNumber);
+            const current = parseFloat(currentNumber);
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+
+            currentNumber = result;
+            operation = null;
+            previousNumber = '';
+            document.getElementById('display').value = result;
+        }
+
+        function clearDisplay() {
+            currentNumber = '';
+            previousNumber = '';
+            operation = null;
+            document.getElementById('display').value = '';
+        }
+
+        // カメラ起動
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                document.getElementById('camera').srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera: ', err);
+            });
+
+        // 量子コンピュータアプリ
+        require.config({
+            paths: {
+                'qiskit': 'https://cdnjs.cloudflare.com/ajax/libs/qiskit/0.23.0/qiskit.min'
+            }
+        });
+        require(['qiskit'], function (qiskit) {
+            async function runQuantumCircuit() {
+                const { QuantumCircuit, transpile, Aer, execute } = qiskit;
+
+                const qc = new QuantumCircuit(2);
+                qc.h(0);
+                qc.cx(0, 1);
+                qc.measure_all();
+
+                const simulator = Aer.get_backend('qasm_simulator');
+                const compiled_circuit = transpile(qc, simulator);
+                const job = await execute(compiled_circuit, simulator, { shots: 1000 });
+                const result = await job.result();
+
+                const counts = result.get_counts(compiled_circuit);
+                document.getElementById('result').innerText = `測定結果: ${JSON.stringify(counts)}`;
+            }
+
+            document.getElementById('run-button').addEventListener('click', runQuantumCircuit);
+        });
+    </script>
+</body>
+</html>
